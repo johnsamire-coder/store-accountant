@@ -55,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
         SwitchListTile(
           secondary: const Icon(Icons.notifications_active),
           title: const Text('شغّل التذكيرات'),
-          subtitle: const Text('10 الصبح اليومي • الخميس الأسبوعي • الشيكات • المصروفات الثابتة • المرتبات يوم 25'),
+          subtitle: const Text('10 الصبح اليومي • الخميس متابعة المالك • أول الشهر المطابقة • الشيكات • المصروفات الثابتة • المرتبات يوم 25'),
           value: s.setting<bool>(K.reminders) ?? true,
           onChanged: (v) => s.set(K.reminders, v),
         ),

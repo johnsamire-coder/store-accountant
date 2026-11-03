@@ -71,6 +71,9 @@ void main() {
     expect(byId(2).when, DateTime(2026, 11, 5, 10)); // أول خميس
     expect(byId(2).when.weekday, DateTime.thursday);
     expect(byId(3).when, DateTime(2026, 11, 25, 9));
+    expect(byId(2).body, contains('جالك كام الأسبوع ده؟ دفعت كام ولمين'));
+    expect(byId(4).when, DateTime(2026, 12, 1, 10)); // أول الشهر الجاي
+    expect(byId(4).repeat, Repeat.monthly);
     final cheques = plan.where((r) => r.id >= 1000).toList();
     expect(cheques.map((r) => r.when).toList(), [DateTime(2026, 12, 13, 9), DateTime(2026, 12, 15, 9)]);
     final fixed = plan.where((r) => r.id >= 100 && r.id < 1000).toList();

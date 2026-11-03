@@ -40,8 +40,12 @@ List<Reminder> reminderPlan(AppState s) {
   final now = s.now;
   final out = <Reminder>[
     Reminder(1, 'التقرير اليومي', 'سجّل حركات امبارح من الجروب وابعت التقرير اليومي للمالك', _next(now, 10), Repeat.daily),
-    Reminder(2, 'التقرير الأسبوعي (الخميس)', 'ابعت التقرير الأسبوعي + اطلب من المالك يأكد رصيد خزنته', _next(now, 10, weekday: DateTime.thursday), Repeat.weekly),
+    Reminder(2, 'متابعة الخميس مع المالك',
+        'اسأله: جالك كام الأسبوع ده؟ دفعت كام ولمين (الوسيط، شركة الشحن، فيني، المستخلص)؟ + ابعت التقرير الأسبوعي وأكّد رصيد الخزنة',
+        _next(now, 10, weekday: DateTime.thursday), Repeat.weekly),
     Reminder(3, 'المرتبات', 'كشف الحضور بيوصل النهارده (25) — جهّز كشف المرتبات والسلف', _next(now, 9, day: 25), Repeat.monthly),
+    Reminder(4, 'مطابقة أول الشهر', 'طابق مع المالك رصيده عند شركة الشحن وفيني والوسيط، وراجع المحافظ، وطلّع التقرير الشهري',
+        _next(now, 10, day: 1), Repeat.monthly),
   ];
   // المصروفات الثابتة: كل بند ليه ميعاد في الشهر
   final seen = <String>{};
