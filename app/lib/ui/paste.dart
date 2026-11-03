@@ -86,13 +86,13 @@ String summaryOf(WaParsed p) {
       return '${x.type} — ${fmtNum(x.amount)} جنيه — ${fmtDate(x.date)}${x.shipmentNo.isEmpty ? '' : ' — ${x.shipmentNo}'}${x.note.isEmpty ? '' : '\n${x.note}'}';
     case WaKind.usd:
       final x = p.usd!;
-      return 'دفع ${fmtNum(x.egpPaid)} جنيه ← \$${fmtNum(x.usdReceived)} (سعر ${x.rate == null ? '-' : fmtDec(x.rate!, 2)})\n${x.supplier} — ${x.shipmentNo} — ${fmtDate(x.date)}';
+      return 'دفع ${fmtNum(x.egpPaid)} جنيه = \$${fmtNum(x.usdReceived)} (سعر ${x.rate == null ? '-' : fmtDec(x.rate!, 2)})\n${x.supplier} — ${x.shipmentNo} — ${fmtDate(x.date)}';
     case WaKind.handover:
       final x = p.handover!;
       return 'توريد ${x.branch} — ${fmtNum(x.delivered)} — ${fmtDate(x.date)}${x.reportNo.isEmpty ? '' : ' — محضر ${x.reportNo}'}\n(نقدي السيستم والتحصيلات والنثريات بتكملهم من السيستم)';
     case WaKind.transfer:
       final x = p.transfer!;
-      return 'إذن ${x.no}: ${x.from} ← ${x.to} — ${fmtNum(x.totalSent)} قطعة';
+      return 'إذن ${x.no}: من ${x.from} لـ ${x.to} — ${fmtNum(x.totalSent)} قطعة';
   }
 }
 

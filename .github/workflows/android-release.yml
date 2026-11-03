@@ -1,0 +1,86 @@
+# بيبني ملف تسطيب أندرويد (APK) على سيرفرات جيت هاب وبيحطه في Release كلينك للتحميل.
+# بيشتغل لوحده مع كل رفع للتطبيق، أو بإيدك من صفحة Actions.
+name: Build Android APK
+
+on:
+  push:
+    branches: [main, ccr-bbd924ca-eppveu]
+    paths: ['app/**', '.github/workflows/android-release.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.9'
+          channel: stable
+          cache: true
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Run all tests (workbook numbers must match)
+        run: flutter test
+
+      # مفتاح التوقيع الثابت من خزنة جيت هاب السرية (Secrets) لو موجود — عمره ما بيتحط في الملفات
+      - name: Signing key (from repository secrets, if set)
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$KEYSTORE_PASSWORD" ]; then
+            mkdir -p android/signing
+            echo "$KEYSTORE_B64" | base64 -d > android/signing/hesabaty-release.jks
+            printf 'storeFile=signing/hesabaty-release.jks\nstorePassword=%s\nkeyAlias=hesabaty\nkeyPassword=%s\n' "$KEYSTORE_PASSWORD" "$KEYSTORE_PASSWORD" > android/key.properties
+            echo "Signing with the permanent key"
+          else
+            echo "No signing secrets: signing with a temporary key"
+          fi
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Name the file
+        id: name
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: *//; s/+.*//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          cp build/app/outputs/flutter-apk/app-release.apk "$GITHUB_WORKSPACE/hesabaty-$VERSION-build${{ github.run_number }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hesabaty-apk
+          path: hesabaty-*.apk
+
+      - name: Publish release (download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.name.outputs.version }}-build${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          name: حساباتي ${{ steps.name.outputs.version }} (نسخة ${{ github.run_number }})
+          make_latest: true
+          files: hesabaty-*.apk
+          body: |
+            ملف التسطيب لتطبيق حساباتي (أندرويد 9 أو أحدث).
+            افتح الملف hesabaty-….apk من الموبايل ودوس تسطيب.
+            لو الموبايل سأل: اسمح بالتسطيب من المصدر ده (مرة واحدة بس).
+            التحديث بيتسطب فوق القديم والبيانات بتفضل زي ما هي.

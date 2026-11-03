@@ -244,7 +244,7 @@ class MoneyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = AppScope.of(context);
     return _Menu('الفلوس', [
-      (Icons.content_paste_go, 'لصق من الواتساب', 'رسالة المالك ← قيد جاهز', moneyColor,
+      (Icons.content_paste_go, 'لصق من الواتساب', 'رسالة المالك تبقى قيد جاهز', moneyColor,
           () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PasteScreen()))),
       _reg(context, s, cashHandoverSpec),
       _reg(context, s, safeMovementSpec),

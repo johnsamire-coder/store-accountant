@@ -261,7 +261,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('التقرير الأسبوعي')),
       body: ListView(key: ValueKey(key), padding: const EdgeInsets.fromLTRB(12, 8, 12, 40), children: [
-        DateBar(date: from, step: 7, label: '${fmtDate(from)} ← ${fmtDate(end)}', onChanged: (v) => setState(() => start = weekStart(v))),
+        DateBar(date: from, step: 7, label: 'من ${fmtDate(from)} لـ ${fmtDate(end)}', onChanged: (v) => setState(() => start = weekStart(v))),
         const SectionTitle('اكتب من السيستم'),
         ManualBranchInput('مبيعات آجل', manual.creditSales, (v) => put('creditSales', bbJson(v))),
         ManualBranchInput('مردودات (بالسالب)', manual.returns, (v) => put('returns', bbJson(v))),

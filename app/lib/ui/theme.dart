@@ -16,10 +16,11 @@ ThemeData buildTheme(Brightness b) {
     colorScheme: scheme,
     brightness: b,
     fontFamily: appFont,
+    fontFamilyFallback: const ['NotoSans'], // علامات زي ( ) — + % مش موجودة في الخط العربي
     visualDensity: VisualDensity.standard,
   );
   return base.copyWith(
-    textTheme: base.textTheme.apply(fontFamily: appFont),
+    textTheme: base.textTheme.apply(fontFamily: appFont, fontFamilyFallback: const ['NotoSans']),
     appBarTheme: AppBarTheme(
       centerTitle: false,
       backgroundColor: scheme.surface,

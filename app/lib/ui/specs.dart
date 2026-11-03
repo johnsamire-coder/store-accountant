@@ -97,7 +97,7 @@ String _transferStatus(StockTransfer t, AppState s) {
 
 final stockTransferSpec = EntitySpec<StockTransfer>(
   codec: stockTransferCodec,
-  title: 'تحويلات بورسعيد ← القاهرة',
+  title: 'تحويلات بورسعيد للقاهرة',
   single: 'إذن تحويل',
   icon: Icons.local_shipping,
   color: goodsColor,

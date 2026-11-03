@@ -48,7 +48,7 @@ class PinPad extends StatelessWidget {
                   onChanged(entered + k);
                 }
               },
-              child: Text(k, style: const TextStyle(fontSize: 28)),
+              child: k == '⌫' ? const Icon(Icons.backspace_outlined, size: 28, semanticLabel: 'امسح') : Text(k, style: const TextStyle(fontSize: 28)),
             ),
           ),
         );

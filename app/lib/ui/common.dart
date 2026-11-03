@@ -159,7 +159,7 @@ class MessageBox extends StatelessWidget {
               child: FilledButton.icon(
                 style: FilledButton.styleFrom(backgroundColor: moneyColor),
                 icon: const Icon(Icons.share),
-                label: const Text('ابعت واتساب'),
+                label: const Text('واتساب'),
                 onPressed: () => shareText(text),
               ),
             ),
