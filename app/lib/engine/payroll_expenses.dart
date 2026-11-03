@@ -35,18 +35,26 @@ class Advance {
     return n < 0 ? 0 : (n > installments ? installments : n);
   }
 
-  /// I: الباقي بعد مرتبات الشهر
-  double remainingAfter(DateTime payrollMonth) {
-    final r = amount - monthly * paidCount(payrollMonth);
-    return r < 0 ? 0 : r;
+  /// المخصوم لحد قسط رقم n.
+  /// قرار جون (2026-11-03): آخر قسط بياخد الباقي، علشان السلفة تقفل صفر
+  /// (في الإكسل 1,000 على 3 = 333 × 3 ويفضل جنيه للأبد).
+  double _paidUpTo(int n) {
+    if (n <= 0) return 0;
+    if (n >= installments) return amount;
+    final p = monthly * n;
+    return p > amount ? amount : p;
   }
+
+  /// I: الباقي بعد مرتبات الشهر
+  double remainingAfter(DateTime payrollMonth) =>
+      amount - _paidUpTo(paidCount(payrollMonth));
 
   /// القسط اللي بيتخصم في شهر معين (L في المرتبات)
   double deductionFor(DateTime payrollMonth) {
     final m = _month(payrollMonth);
-    return (!_month(firstMonth).isAfter(m) && !lastMonth.isBefore(m))
-        ? monthly
-        : 0;
+    if (_month(firstMonth).isAfter(m) || lastMonth.isBefore(m)) return 0;
+    final n = paidCount(m);
+    return _paidUpTo(n) - _paidUpTo(n - 1);
   }
 
   /// J: الحالة. maxMultiple = أقصى سلفة كام مرة من الأساسي (D4)
