@@ -1,5 +1,6 @@
 // تحويل كل نوع بيانات لصيغة تتحفظ (JSON) وترجع زي ما هي.
 import '../engine/cash.dart';
+import 'store.dart' show Stored;
 import '../engine/customers.dart';
 import '../engine/landed_cost.dart';
 import '../engine/payables_stock.dart';
@@ -21,6 +22,10 @@ class Codec<T> {
   final Json Function(T) encode;
   final T Function(Json) decode;
   const Codec(this.collection, this.encode, this.decode);
+
+  /// السجل بيتعمل بنوعه الحقيقي (مهم لما الكود بيقرا كل الأنواع مع بعض)
+  Stored<T> stored(String id, Json data, DateTime createdAt, DateTime updatedAt) =>
+      Stored<T>(id, decode(data), createdAt, updatedAt);
 }
 
 // ───────── الشحنة (التكلفة الواصلة) ─────────
@@ -480,6 +485,7 @@ final advanceCodec = Codec<Advance>(
 final fixedExpenseCodec = Codec<FixedExpense>(
   'fixed_expenses',
   (f) => {
+    'month': _d(f.month),
     'name': f.name,
     'category': f.category,
     'branch': f.branch,
@@ -490,6 +496,7 @@ final fixedExpenseCodec = Codec<FixedExpense>(
     'receiptNo': f.receiptNo,
   },
   (j) => FixedExpense(
+    month: _pd(j['month']),
     name: _s(j['name']),
     category: _s(j['category']),
     branch: _s(j['branch']),

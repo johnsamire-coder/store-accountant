@@ -153,7 +153,9 @@ class FixedExpense {
   final int dueDay; // E
   final bool paid; // F
   final double? actual; // G
+  final DateTime? month; // الشهر (الإكسل شيت لشهر واحد؛ التطبيق بيحفظ كل شهر)
   const FixedExpense({
+    this.month,
     required this.name,
     required this.category,
     required this.branch,
@@ -163,6 +165,14 @@ class FixedExpense {
     this.actual,
     this.receiptNo = '',
   });
+
+  FixedExpense copyFor(DateTime m) => FixedExpense(
+      month: DateTime(m.year, m.month, 1),
+      name: name,
+      category: category,
+      branch: branch,
+      expected: expected,
+      dueDay: dueDay);
 
   /// H
   double? get difference => paid ? (actual ?? 0) - expected : null;

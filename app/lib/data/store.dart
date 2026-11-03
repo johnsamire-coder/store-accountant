@@ -137,9 +137,9 @@ class LocalStore {
   Future<List<T>> values<T>(Codec<T> c) async =>
       [for (final s in await list(c)) s.value];
 
-  Stored<T> _row<T>(Codec<T> c, Map<String, Object?> r) => Stored(
+  Stored<T> _row<T>(Codec<T> c, Map<String, Object?> r) => c.stored(
         r['id'] as String,
-        c.decode((jsonDecode(r['data'] as String) as Map).cast<String, dynamic>()),
+        (jsonDecode(r['data'] as String) as Map).cast<String, dynamic>(),
         DateTime.parse(r['created_at'] as String),
         DateTime.parse(r['updated_at'] as String),
       );
